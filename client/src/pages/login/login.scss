@@ -1,0 +1,174 @@
+@import "../../style.scss";
+
+.login {
+  height: 100vh;
+  background-color: rgb(193, 190, 255);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  .card {
+    width: 50%;
+    display: flex;
+    background-color: white;
+    border-radius: 10px;
+    min-height: 600px;
+    overflow: hidden;
+
+    @include labtop{
+      width: 70%;
+      min-height: 400px;
+    }
+
+    @include tablet{
+      width: 70%;
+      min-height: 500px;
+    }
+
+    @include mobile{
+      width: 80%;
+      min-height: 200px;
+    }
+
+    .left {
+      flex: 1;
+      background: linear-gradient(rgba(39, 11, 96, 0.5), rgba(39, 11, 96, 0.5)),
+        url("https://images.pexels.com/photos/3228727/pexels-photo-3228727.jpeg?auto=compress&cs=tinysrgb&w=1600")
+          center;
+      background-size: cover;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      gap: 30px;
+      color: white;
+      
+      @include tablet{
+        display: none;
+      }
+
+      @include mobile{
+        display: none;
+      }
+
+      h1 {
+        font-size: 100px;
+        line-height: 100px;
+      }
+      
+      p {
+      }
+
+      span {
+        font-size: 14px;
+      }
+      
+      button {
+        width: 50%;
+        padding: 10px;
+        border: none;
+        background-color: white;
+        color: rebeccapurple;
+        font-weight: bold;
+        cursor: pointer;
+        border-radius: 5px;
+      }
+    }
+
+    .right {
+      flex: 1;
+      padding: 50px;
+      display: flex;
+      flex-direction: column;
+      gap: 50px;
+      justify-content: center;
+      
+      @include labtop{
+        gap: 20px;
+      }
+
+      @include tablet{
+      padding: 40px;
+      gap: 25px;
+      }
+
+
+      @include mobile{
+      padding: 20px;
+      gap: 15px;
+      }
+
+
+
+      h1 {
+      color: #555;
+      }
+      
+      form {
+        display: flex;
+        flex-direction: column;
+        gap: 30px;
+        
+        
+        input {
+        border: none;
+        border-bottom: 1px solid lightgray;
+        padding: 20px 10px;
+        }
+        
+        button {
+          width: 50%;
+          padding: 10px;
+          border: none;
+          background-color: #938eef;
+          color: white;
+          font-weight: bold;
+          cursor: pointer;
+          border-radius: 5px;
+        }
+      }
+     
+      .small{
+        display: none;
+        
+
+
+        @include tablet{
+        display: flex;
+        font-size: 19px;
+        }
+    
+    
+          @include mobile{
+          display: flex;
+          font-size: 14px;
+          }
+      }
+     
+      .smallBtn{
+        display: none;
+        width: 27%;
+        padding: 7px;
+        border: none;
+        color: #938eef;
+        background-color: transparent;
+        font-weight: bold;
+        cursor: pointer;
+
+        @include tablet{
+          display: flex;
+          width: 30%;
+          padding: 10px;
+          font-size: 17px;
+          }
+    
+    
+          @include mobile{
+           display: flex;
+           font-size: 12px;
+          }
+      }
+
+
+    }
+  }
+}
