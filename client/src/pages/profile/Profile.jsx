@@ -16,6 +16,7 @@ import { useContext, useState } from "react";
 import { AuthContext } from "../../context/authContext";
 import Update from "../../components/update/Update";
 import { Helmet } from "react-helmet-async";
+import Cookies from 'js-cookie';
 
 const Profile = () => {
 
@@ -34,7 +35,6 @@ const Profile = () => {
   });
 
   
-
 
   const { isLoading: rsLoading, data: relationshipData } = useQuery({
     queryKey: ["relationship"],
@@ -69,7 +69,8 @@ const Profile = () => {
     e.preventDefault();
    try {
    await logout();
-   navigate("/login")
+   Cookies.remove("accessToken");
+   navigate("/login");
    } catch (error) {
      console.log(error)
    }

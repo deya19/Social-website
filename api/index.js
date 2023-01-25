@@ -11,66 +11,53 @@ import cookieParser from "cookie-parser";
 import multer from "multer";
 import dotenv from "dotenv";
 dotenv.config();
-import rawBody from "raw-body";
-import contentType from "content-type";
 import bodyParser from "body-parser";
 import hpp from "hpp";
 import helmet from "helmet";
-import loggerServices from "./services/logger.sevice.js";
+import compression from "compression";
+import rateLimit from 'express-rate-limit';
 
 
-//Winston Logger
-const logger = new loggerServices("error.control");
-const port = process.env.SERVER_PORT;
+//express app
 const app = express();
 
-//setting various HTTP headers
+// setting various HTTP headers
 app.use(helmet());
 
-// security vulnerability that occurs when an attacker is able to inject multiple values into a single HTTP request parameter, resulting in unexpected behavior or exploitation of a web application.
+// enable domain "http://localhost:3000" to access your application
+app.use(cors({
+  origin:"http://localhost:3000",
+  credentials: true,
+}));
+
+//compress all response
+app.use(compression());
+
+//Middleware
+app.use(bodyParser.json({limit:"20kb"}));
+
+
+// Limit each IP to 100 requests per `window` (here, per 15 minutes)
+const limiter = rateLimit({
+  windowMs: 60 * 60 * 1000, // 1 hour
+  max: 1000,
+  message: 'Too many requests from this IP, please try again later',
+});
+
+// Apply the rate limiting middleware to all requests
+app.use('/api', limiter);
+
+
+
+// Middleware to protect against HTTP Parameter Pollution attacks
 app.use(hpp());
 
 
-//middlewares
-app.use((req,res,next)=>{
-  res.header("Access-Control-Allow-Credentials",true);
-  next();
-});
-
-
-app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
-
-
-// to reduce the lenght of request
-app.use((req, res, next) => {
-  if (req.readable) {
-    // read the request body and attach it to req.text
-    rawBody(req, {
-      length: req.headers['content-length'],
-      limit: '1mb',
-      encoding: contentType.parse(req).parameters.charset
-    }, (err, string) => {
-      if (err) {
-        logger.error("the lenght of request too long" + JSON.stringify(err));
-        return next(err);
-      };
-      req.text = string;
-      next();
-    });
-  } else {
-    // the request body is not readable, so skip parsing it
-    next();
-  }
-});
-
-
-app.use(cors({
-  origin:"http://localhost:3000",
-}));
 
 //It allows you to read, parse, and set cookies in a Node.js application.
 app.use(cookieParser());
+
+
 
 const storage = multer.diskStorage({
   //path to storage pic in client file
@@ -92,17 +79,20 @@ app.post("/api/upload", upload.single("file"),(req,res) => {
   res.status(200).json(file.filename);
  })
 
+
+
 app.use("/api/auth" , authRoutes)
 app.use("/api/comments" , commentRoutes)
 app.use("/api/likes" , likeRoutes)
 app.use("/api/posts" , postRoutes)
 app.use("/api/relationships" , relatioshipRoutes)
-app.use("/api/stories" , storyRoutes)
+// app.use("/api/stories" , storyRoutes)
 app.use("/api/users" , userRoutes)
 
 
 
-app.listen(port,() => {
+
+app.listen(process.env.SERVER_PORT,() => {
   console.log(`Server Start .......... `);
 });
 

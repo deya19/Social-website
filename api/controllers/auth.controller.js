@@ -147,11 +147,11 @@ export const login =(req,res)=>{
 
     const threeDaysInMilliseconds = 3 * 24 * 60 * 60 * 1000;
     res.cookie(process.env.SIGN_TOKEN, token,{
-      httpOnly:true,
+      // httpOnly:true,
       maxAge:threeDaysInMilliseconds,
       //expires:new Date(Date.now()+900000);
       secure:true,
-    }).status(200).json({others,token});
+    }).status(200).json(others);
   });
 };
 
@@ -165,6 +165,6 @@ export const logout =(req,res)=>{
   } catch (error) {
      console.log("error: "+error);
      logger.error("Failed to LogOut!" + JSON.stringify(err));
-     return res.status(500).send("Not logged out please try again in anithe time!")
+     return res.status(500).send("Not logged out please try again in anothe time!")
   }
 }

@@ -12,7 +12,7 @@ const Home = () => {
         <meta name="Social clone" content="connect everyone in the world to another"/>
       </Helmet>
       <div className="home">
-        <Stories/>
+        {/* <Stories/> */}
         <Share/>
         <Posts/>
       </div>

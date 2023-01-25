@@ -6,6 +6,8 @@ import {
   Route,
   Outlet,
   Navigate,
+  useLocation,
+  useNavigate,
 } from "react-router-dom";
 import Navbar from "./components/navbar/Navbar";
 import LeftBar from "./components/leftBar/LeftBar";
@@ -18,6 +20,7 @@ import { DarkModeContext } from "./context/darkModeContext";
 import { AuthContext } from "./context/authContext";
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 import OneStory from "./pages/oneStory/OneStory";
+import { useIsTokenExpired } from "./cookie/expCookie";
 
 
 
@@ -48,37 +51,44 @@ function App() {
     );
   };
 
-//to prevent go to homepage with out loginin
+
   const ProtectedRoute = ({ children }) => {
-    if (!currentUser) {
-      return <Navigate to="/login" />;
+    const isExpired = useIsTokenExpired();
+    const location = useLocation();
+    const navigate = useNavigate();
+    
+    if (!currentUser || isExpired) {
+      navigate(`/login`, { state: { from: location } });
+      return null;
     }
-
-    return children
-
+    
+    return children;
   };
+    
+    
 
   const router = createBrowserRouter([
     {
       path: "/",
-      element: (
-        <ProtectedRoute>
-          <Layout />
-        </ProtectedRoute>
-      ),
-      //outlet
+      element: <Layout />,
       children: [
         {
           path: "/",
-          element: <Home />,
+          element:  <ProtectedRoute>
+              <Home />
+            </ProtectedRoute>,
         },
         {
           path: "/profile/:id",
-          element: <Profile />,
+          element: <ProtectedRoute>
+              <Profile />
+            </ProtectedRoute>,
         },
         {
           path: "/story/:id",
-          element: <OneStory />,
+          element: <ProtectedRoute>
+              <OneStory />
+            </ProtectedRoute>,
         },
       ],
     },

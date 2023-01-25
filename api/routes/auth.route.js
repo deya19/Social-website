@@ -12,18 +12,3 @@ router.post("/logout" , logout)
 export default router;
 
 
-// const rawBody = require('raw-body');
-
-// app.post('/', (req, res) => {
-//   rawBody(req, {
-//     length: req.headers['content-length'],
-//     limit: '1mb'
-//   }, (err, body) => {
-//     if (err) return res.end(err.message);
-
-//     // Do something with the body
-//     console.log(body);
-
-//     res.end('OK');
-//   });
-// });
